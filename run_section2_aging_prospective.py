@@ -162,10 +162,30 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
         try:
             xmax = int(min(XMAX_YEARS, np.nanpercentile(df_q["time"].values, 99)))
             xmax = max(5, xmax)
+            # Data-driven ymax: pre-fit per-quartile KM to find the maximum
+            # cumulative incidence at xmax across groups, then add 15% headroom
+            # and snap up to a tidy step (avoids dead vertical space for rare
+            # endpoints like hip fracture / delirium / pressure ulcer).
+            from lifelines import KaplanMeierFitter
+            import math
+            cuminc_xmax = []
+            for g in groups:
+                sub = df_q[df_q["q"] == g]
+                if len(sub) == 0:
+                    continue
+                k = KaplanMeierFitter().fit(sub["time"], sub["event"])
+                sf = float(k.survival_function_at_times([xmax]).iloc[0])
+                cuminc_xmax.append(1.0 - sf)
+            y_obs = max(cuminc_xmax) if cuminc_xmax else 0.05
+            target = max(y_obs * 1.15, 0.01)
+            step = (0.005 if target <= 0.025 else
+                    0.01 if target <= 0.05 else
+                    0.02 if target <= 0.15 else
+                    0.05 if target <= 0.40 else 0.10)
+            ymax_km = math.ceil(target / step) * step
             fig, ax, kmf = km_cumulative_incidence_plot(
                 df_q, "time", "event", "q", groups, PAL4,
-                xmax=xmax, ymax=max(YMAX_KM, float(df_q["event"].mean()) * 5),
-                title=title,
+                xmax=xmax, ymax=ymax_km, title=title,
             )
             save_figure(fig, str(fig_dir / f"section2_{label}_km"))
             plt.close(fig)
@@ -195,8 +215,9 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
                 xmax=xmax,
             )
             if adj is not None and len(adj) > 0:
+                # Share the KM ymax so the two figures read consistently
                 fig2 = plot_adjusted_cuminc(adj, groups, PAL4, xmax=xmax,
-                                            ymax=max(YMAX_ADJ, float(adj["cuminc"].max()) * 1.1),
+                                            ymax=ymax_km,
                                             title=f"{title} (adjusted)")
                 # Override the helper's hard-coded y-label
                 fig2.axes[0].set_ylabel(f"Adjusted cumulative incidence (%)", fontsize=10)
