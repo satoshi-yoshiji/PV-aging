@@ -195,9 +195,11 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
                 xmax=xmax,
             )
             if adj is not None and len(adj) > 0:
-                fig2, ax2 = plot_adjusted_cuminc(adj, groups, PAL4, xmax=xmax,
-                                                 ymax=max(YMAX_ADJ, float(adj["cuminc"].max()) * 1.1),
-                                                 title=f"{title} (adjusted)")
+                fig2 = plot_adjusted_cuminc(adj, groups, PAL4, xmax=xmax,
+                                            ymax=max(YMAX_ADJ, float(adj["cuminc"].max()) * 1.1),
+                                            title=f"{title} (adjusted)")
+                # Override the helper's hard-coded y-label
+                fig2.axes[0].set_ylabel(f"Adjusted cumulative incidence (%)", fontsize=10)
                 save_figure(fig2, str(fig_dir / f"section2_{label}_adjcuminc"))
                 plt.close(fig2)
                 save_dataframe(adj, str(src_dir / f"section2_{label}_adjcuminc.csv"))
