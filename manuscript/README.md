@@ -5,14 +5,18 @@ Manuscript draft for the ETP-aging analysis.
 ```
 manuscript/
 ├── Manuscript_ETP_aging.v1.md  # full manuscript with embedded figures
+├── Manuscript_ETP_aging.v1.pdf # mdpdf-rendered PDF (Liberation Serif 12pt, 1.5 line-height, letter, 1in margins)
 ├── figures/
-│   ├── Figure_1_cross_sectional.png        # composite, 3 panels
+│   ├── Figure_1_cross_sectional.png        # composite, 3 panels (cross-sectional aging proxies)
 │   ├── Figure_2_master_forest.png          # 13-endpoint forest, faceted by adjustment model
-│   ├── Figure_3_primary_KM.png             # composite, 4 primary endpoints (mortality, HFRS, Zenin, CKD)
-│   ├── Figure_4_frailty_syndromes_KM.png   # composite, 4 frailty syndromes
-│   ├── Figure_5_disease_panel_KM.png       # composite, disease panel + ICD-event substitutes
+│   ├── Figure_3_primary_KM.png             # PRIMARY (Clinical+Biomarkers): mortality, HFRS, Zenin, CKD
+│   ├── Figure_4_frailty_syndromes_KM.png   # PRIMARY: hip fx, falls, delirium, ulcer
+│   ├── Figure_5_disease_panel_KM.png       # PRIMARY: HF, T2D, dementia, CVD-event, cancer-event
+│   ├── Figure_S1_primary_KM_clinical.png   # SUPPL: Fig 3 with Clinical-only (no CRP/NT-proBNP)
+│   ├── Figure_S2_frailty_syndromes_KM_clinical.png  # SUPPL: Fig 4 Clinical-only
+│   ├── Figure_S3_disease_panel_KM_clinical.png      # SUPPL: Fig 5 Clinical-only
 │   ├── section1_*.png                      # raw per-figure PNGs (Section 1)
-│   └── section2_*.png                      # raw per-endpoint KM and adjusted-cuminc PNGs
+│   └── section2_<endpoint>_adjcuminc_{biomarkers,clinical}.png   # per-endpoint KM/cuminc by adjustment model
 └── supplementary/
     ├── section1_baseline_hfrs_OLS.csv          # Suppl. Table S1
     ├── section1_prevalent_syndromes_OR.csv     # Suppl. Table S2
