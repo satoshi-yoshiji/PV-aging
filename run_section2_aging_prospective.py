@@ -156,7 +156,7 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
         except Exception:
             pass
 
-    # 6. KM and adjusted cuminc only on +Clinical (one figure per endpoint)
+    # 6a. Raw KM + +Clinical-adjusted cumulative incidence (run during +Clinical iteration)
     if model_name == "+Clinical":
         groups = ["Q1", "Q2", "Q3", "Q4"]
         try:
@@ -218,14 +218,59 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
                 # Share the KM ymax so the two figures read consistently
                 fig2 = plot_adjusted_cuminc(adj, groups, PAL4, xmax=xmax,
                                             ymax=ymax_km,
-                                            title=f"{title} (adjusted)")
-                # Override the helper's hard-coded y-label
+                                            title=f"{title} (Clinical-adjusted)")
                 fig2.axes[0].set_ylabel(f"Adjusted cumulative incidence (%)", fontsize=10)
-                save_figure(fig2, str(fig_dir / f"section2_{label}_adjcuminc"))
+                save_figure(fig2, str(fig_dir / f"section2_{label}_adjcuminc_clinical"))
                 plt.close(fig2)
-                save_dataframe(adj, str(src_dir / f"section2_{label}_adjcuminc.csv"))
+                save_dataframe(adj, str(src_dir / f"section2_{label}_adjcuminc_clinical.csv"))
         except Exception as e:
             LOG.warning("Adjusted cuminc failed for %s: %s", label, e)
+
+    # 6b. +Biomarkers-adjusted cumulative incidence (primary analysis)
+    if model_name == "+Biomarkers":
+        groups = ["Q1", "Q2", "Q3", "Q4"]
+        try:
+            xmax = int(min(XMAX_YEARS, np.nanpercentile(df_q["time"].values, 99)))
+            xmax = max(5, xmax)
+            from lifelines import KaplanMeierFitter
+            import math
+            cuminc_xmax = []
+            for g in groups:
+                sub = df_q[df_q["q"] == g]
+                if len(sub) == 0:
+                    continue
+                k = KaplanMeierFitter().fit(sub["time"], sub["event"])
+                sf = float(k.survival_function_at_times([xmax]).iloc[0])
+                cuminc_xmax.append(1.0 - sf)
+            y_obs = max(cuminc_xmax) if cuminc_xmax else 0.05
+            target = max(y_obs * 1.15, 0.01)
+            step = (0.005 if target <= 0.025 else
+                    0.01 if target <= 0.05 else
+                    0.02 if target <= 0.15 else
+                    0.05 if target <= 0.40 else 0.10)
+            ymax_km = math.ceil(target / step) * step
+            cox_q_dropped = cox_q.dropna()
+            adj = compute_adjusted_cuminc(
+                fit_q,
+                df_design=df_q.loc[cox_q_dropped.index],
+                cox_df_aligned=cox_q_dropped,
+                groups=groups,
+                group_var="q",
+                covars_use=use_covars,
+                time_var="time",
+                event_var="event",
+                xmax=xmax,
+            )
+            if adj is not None and len(adj) > 0:
+                fig2 = plot_adjusted_cuminc(adj, groups, PAL4, xmax=xmax,
+                                            ymax=ymax_km,
+                                            title=f"{title} (Biomarkers-adjusted)")
+                fig2.axes[0].set_ylabel(f"Adjusted cumulative incidence (%)", fontsize=10)
+                save_figure(fig2, str(fig_dir / f"section2_{label}_adjcuminc_biomarkers"))
+                plt.close(fig2)
+                save_dataframe(adj, str(src_dir / f"section2_{label}_adjcuminc_biomarkers.csv"))
+        except Exception as e:
+            LOG.warning("+Biomarkers adjcuminc failed for %s: %s", label, e)
 
     return {
         "endpoint": label,

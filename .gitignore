@@ -9,6 +9,8 @@ __pycache__/
 uger/log/
 log/
 _smoke_test.py
+.claude/
+manuscript/mdpdf.log
 
 # Data — never commit individual-level UKB data
 *.tsv.gz
