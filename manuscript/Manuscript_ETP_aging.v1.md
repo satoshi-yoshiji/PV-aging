@@ -281,8 +281,14 @@ The following supplementary tables and figures are deposited alongside the manus
 - **Supplementary Table S6.** `section2_hfrs_top_contributors.csv` — Top-30 ICD-10 codes ranked by total Gilbert-weight contribution, with per-eid frequency and per-code weight.
 - **Supplementary Table S7.** `section2_per_sd.csv` — Per-SD endotrophin Cox results across 13 endpoints × 3 adjustment models, with raw *P*, BH-q and concordance index. The companion `section2_quartiles.csv` provides the Q2 / Q3 / Q4 vs Q1 hazard ratios per endpoint × model.
 - **Supplementary Table S8.** `section2_zenin_components.csv` — Share of Zenin healthspan composite events contributed by each first-occurring component.
-- **Supplementary Fig. S1.** `Figure_S1_primary_KM_clinical.png` — Clinical-only-adjusted (without CRP / NT-proBNP) cumulative incidence by endotrophin quartile for the four primary endpoints (mirrors Fig. 3).
-- **Supplementary Fig. S2.** `Figure_S2_frailty_syndromes_KM_clinical.png` — Clinical-only-adjusted version of Fig. 4.
-- **Supplementary Fig. S3.** `Figure_S3_disease_panel_KM_clinical.png` — Clinical-only-adjusted version of Fig. 5.
+### Supplementary figures
 
-The 26 individual KM and adjusted-cumulative-incidence PDFs underlying Figs. 3 – 5 and Suppl. Figs. S1 – S3 are deposited at `results/figures/`; the per-endpoint source-data CSVs are at `results/source_data/`.
+The Clinical-only-adjusted versions of Figs. 3 – 5 (i.e. the same Cox-modelled cumulative-incidence curves but **without** CRP and NT-proBNP in the adjustment set) are reproduced below as Suppl. Figs. S1 – S3. They are presented for transparency: the differences between the primary (Clinical + Biomarkers) and Clinical-only curves quantify how much of the endotrophin → endpoint signal is mediated by CRP and NT-proBNP.
+
+![Supplementary Figure S1 — Clinical-only-adjusted cumulative incidence by endotrophin quartile (Q1 reference) for the four primary endpoints (mirrors Fig. 3 but omits CRP and NT-proBNP from the adjustment set). **a**, All-cause mortality. **b**, HFRS-positive admission (≥5). **c**, Zenin healthspan composite. **d**, Incident CKD.](figures/Figure_S1_primary_KM_clinical.png)
+
+![Supplementary Figure S2 — Clinical-only-adjusted cumulative incidence by endotrophin quartile for the four frailty-syndrome hospitalisations (mirrors Fig. 4). **a**, Hip fracture. **b**, Falls. **c**, Delirium. **d**, Pressure ulcer.](figures/Figure_S2_frailty_syndromes_KM_clinical.png)
+
+![Supplementary Figure S3 — Clinical-only-adjusted cumulative incidence by endotrophin quartile for the disease panel and the cause-specific-mortality ICD-event substitutes (mirrors Fig. 5). **a**, Incident HF. **b**, Incident T2D. **c**, Incident dementia. **d**, Any incident CVD event. **e**, Any incident cancer event.](figures/Figure_S3_disease_panel_KM_clinical.png)
+
+The 39 individual KM and adjusted-cumulative-incidence PDFs (one per endpoint × {raw KM, Clinical-only adjcuminc, Clinical + Biomarkers adjcuminc}) are deposited at `results/figures/`; the per-endpoint source-data CSVs are at `results/source_data/`.
