@@ -2,10 +2,6 @@
 
 **Running title:** Endotrophin and accelerated aging
 
-**Data availability.** Individual-level UK Biobank data are not redistributable; access can be requested from UK Biobank (<https://www.ukbiobank.ac.uk>). All analysis code, source-data CSVs and figure-generating scripts are deposited at <https://github.com/satoshi-yoshiji/PV-aging>.
-
-**Code availability.** Pipeline code (Python 3.10; `lifelines` 0.30, `statsmodels` 0.14, `pandas` 2.3, `numpy` 2.2) is at the same URL. Heavy fits ran on the Broad UGER cluster.
-
 **Word count.** Abstract 152; main text ~5,300.
 
 ---
