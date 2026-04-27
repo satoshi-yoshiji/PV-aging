@@ -1,11 +1,15 @@
 """
 Re-render Section 2 KM and adjusted-cumulative-incidence figures with a
-data-driven y-axis (max cumulative incidence at xmax + 15% headroom,
-snapped up to a tidy step) instead of the previous fixed-floor heuristic.
+PER-PLOT data-driven y-axis (max cumulative incidence at xmax + 15% headroom,
+snapped up to a tidy step).
+
+The previous implementation derived a SHARED ymax from the raw KM curves and
+re-used it for the adjusted-cuminc plots. Adjusted curves are usually tighter
+than the raw stratified curves, so this left dead vertical space at the top of
+the adjusted plots. This rewrite gives each output its own ymax.
 
 Reads the already-saved source-data CSVs (results/source_data/*) and writes
-both the PDF (results/figures/*) and the PNG copy in
-manuscript/figures/*.
+both the PDF (results/figures/*) and the PNG copy in manuscript/figures/*.
 """
 from __future__ import annotations
 
@@ -24,7 +28,6 @@ SRC = ROOT / "results" / "source_data"
 PDF_DIR = ROOT / "results" / "figures"
 PNG_DIR = ROOT / "manuscript" / "figures"
 
-# Endpoint label -> nice plot title (matches run_section2_aging_prospective.ENDPOINTS)
 TITLES = {
     "all_cause_mortality": "All-cause mortality",
     "incident_HFRS5":      "HFRS-positive admission (>=5)",
@@ -41,20 +44,19 @@ TITLES = {
     "incident_dementia":   "Incident dementia",
 }
 
-# Standard 4-quartile palette consistent with PAL4 in ckd_shared
 PAL4 = ["#3b8bba", "#7fb069", "#f1a340", "#d7191c"]
-
 GROUPS = ["Q1", "Q2", "Q3", "Q4"]
 
 
 def tidy_ymax(y_observed: float) -> float:
-    """Snap y_observed (with 15% headroom) up to a tidy step.
+    """Snap (y_observed * 1.15) up to a tidy step.
 
-    Uses 0.005 / 0.01 / 0.02 / 0.05 / 0.1 depending on magnitude so the
-    axis carries 4-5 visible ticks regardless of endpoint rate.
+    Steps scale with magnitude so the axis carries 4-5 visible ticks
+    regardless of endpoint rate.
     """
-    target = max(y_observed * 1.15, 0.01)
-    if target <= 0.025:   step = 0.005
+    target = max(y_observed * 1.15, 0.005)
+    if target <= 0.015:   step = 0.0025
+    elif target <= 0.025: step = 0.005
     elif target <= 0.05:  step = 0.01
     elif target <= 0.15:  step = 0.02
     elif target <= 0.40:  step = 0.05
@@ -62,9 +64,24 @@ def tidy_ymax(y_observed: float) -> float:
     return math.ceil(target / step) * step
 
 
+def derive_axes(df: pd.DataFrame) -> tuple[float, float]:
+    """Per-plot xmax (99th-pct of times) and ymax from cuminc at that xmax."""
+    xmax = float(np.nanpercentile(df["time"], 99))
+    xmax = float(min(15.0, max(5.0, round(xmax))))
+    per_group_max = []
+    for g in GROUPS:
+        sub = df[df["group"] == g]
+        sub = sub[sub["time"] <= xmax]
+        if len(sub):
+            per_group_max.append(float(sub["cuminc"].max()))
+    y_observed = max(per_group_max) if per_group_max else 0.005
+    return xmax, tidy_ymax(y_observed)
+
+
 def render_curves(df: pd.DataFrame, title: str, ymax: float, xmax: float,
-                  is_adjusted: bool, out_stem: Path) -> None:
-    """Render KM-style cumulative-incidence curves from a (time, group, cuminc) DF."""
+                  is_adjusted: bool, out_stem: Path,
+                  caption_suffix: str = "") -> None:
+    """Render one figure (KM or adjusted-cuminc) with tight per-plot ylim."""
     fig, ax = plt.subplots(figsize=(7, 3.5))
     for i, g in enumerate(GROUPS):
         sub = df[df["group"] == g].sort_values("time")
@@ -82,8 +99,8 @@ def render_curves(df: pd.DataFrame, title: str, ymax: float, xmax: float,
     ax.set_xlabel("Year", fontsize=10)
     ylabel = "Adjusted cumulative incidence (%)" if is_adjusted else "Cumulative incidence (%)"
     ax.set_ylabel(ylabel, fontsize=10)
-    suffix = " (adjusted)" if is_adjusted else ""
-    ax.set_title(f"{title}{suffix}", fontsize=11)
+    full_title = f"{title}{caption_suffix}"
+    ax.set_title(full_title, fontsize=11)
     ax.legend(title="", fontsize=9)
     plt.tight_layout()
     fig.savefig(f"{out_stem}.pdf", dpi=300)
@@ -93,50 +110,41 @@ def render_curves(df: pd.DataFrame, title: str, ymax: float, xmax: float,
 
 def main():
     PNG_DIR.mkdir(parents=True, exist_ok=True)
-    # Pair each endpoint with both KM and adjcuminc; compute a SINGLE y-max per
-    # endpoint shared between the two so they read consistently side-by-side.
     for label, title in TITLES.items():
+        # Raw KM (model-independent)
         km_csv = SRC / f"section2_{label}_km.csv"
-        adj_csv = SRC / f"section2_{label}_adjcuminc.csv"
-        if not km_csv.exists():
-            print(f"SKIP (no km source data): {label}")
-            continue
-        df_km = pd.read_csv(km_csv)
-        df_adj = pd.read_csv(adj_csv) if adj_csv.exists() else None
+        if km_csv.exists():
+            df_km = pd.read_csv(km_csv)
+            xmax, ymax = derive_axes(df_km)
+            render_curves(df_km, title, ymax, xmax, is_adjusted=False,
+                          out_stem=PDF_DIR / f"section2_{label}_km")
+            os.replace(str(PDF_DIR / f"section2_{label}_km.png"),
+                       str(PNG_DIR / f"section2_{label}_km.png"))
+            print(f"{label:24s}  km:                xmax={xmax:.0f}  ymax={ymax:.3f}")
 
-        # x-axis cap: 99th percentile time across all rows
-        xmax = float(np.nanpercentile(df_km["time"], 99))
-        xmax = min(15.0, max(5.0, round(xmax)))
+        # Clinical-only adjcuminc
+        clin_csv = SRC / f"section2_{label}_adjcuminc_clinical.csv"
+        if clin_csv.exists():
+            df_clin = pd.read_csv(clin_csv)
+            xmax, ymax = derive_axes(df_clin)
+            render_curves(df_clin, title, ymax, xmax, is_adjusted=True,
+                          out_stem=PDF_DIR / f"section2_{label}_adjcuminc_clinical",
+                          caption_suffix=" (Clinical-only)")
+            os.replace(str(PDF_DIR / f"section2_{label}_adjcuminc_clinical.png"),
+                       str(PNG_DIR / f"section2_{label}_adjcuminc_clinical.png"))
+            print(f"{label:24s}  adjcuminc_clinical:  xmax={xmax:.0f}  ymax={ymax:.3f}")
 
-        # y-axis cap: max cumulative incidence at xmax across groups, +15%, snapped
-        per_group_max = []
-        for g in GROUPS:
-            sub_km = df_km[df_km["group"] == g]
-            sub_km = sub_km[sub_km["time"] <= xmax]
-            if len(sub_km):
-                per_group_max.append(float(sub_km["cuminc"].max()))
-            if df_adj is not None:
-                sub_adj = df_adj[df_adj["group"] == g]
-                sub_adj = sub_adj[sub_adj["time"] <= xmax]
-                if len(sub_adj):
-                    per_group_max.append(float(sub_adj["cuminc"].max()))
-        y_observed = max(per_group_max) if per_group_max else 0.05
-        ymax = tidy_ymax(y_observed)
-        print(f"{label:24s}  xmax={xmax:.0f}  observed_max={y_observed:.4f}  ymax={ymax:.3f}")
-
-        render_curves(df_km, title, ymax, xmax, is_adjusted=False,
-                      out_stem=PDF_DIR / f"section2_{label}_km")
-        # Also write to manuscript PNG dir
-        # (render_curves already wrote .png alongside .pdf next to the stem)
-        # Move .png copy to manuscript
-        os.replace(str(PDF_DIR / f"section2_{label}_km.png"),
-                   str(PNG_DIR / f"section2_{label}_km.png"))
-
-        if df_adj is not None and len(df_adj):
-            render_curves(df_adj, title, ymax, xmax, is_adjusted=True,
-                          out_stem=PDF_DIR / f"section2_{label}_adjcuminc")
-            os.replace(str(PDF_DIR / f"section2_{label}_adjcuminc.png"),
-                       str(PNG_DIR / f"section2_{label}_adjcuminc.png"))
+        # Biomarkers (primary) adjcuminc
+        bio_csv = SRC / f"section2_{label}_adjcuminc_biomarkers.csv"
+        if bio_csv.exists():
+            df_bio = pd.read_csv(bio_csv)
+            xmax, ymax = derive_axes(df_bio)
+            render_curves(df_bio, title, ymax, xmax, is_adjusted=True,
+                          out_stem=PDF_DIR / f"section2_{label}_adjcuminc_biomarkers",
+                          caption_suffix=" (Clinical + Biomarkers)")
+            os.replace(str(PDF_DIR / f"section2_{label}_adjcuminc_biomarkers.png"),
+                       str(PNG_DIR / f"section2_{label}_adjcuminc_biomarkers.png"))
+            print(f"{label:24s}  adjcuminc_biomarkers: xmax={xmax:.0f}  ymax={ymax:.3f}")
 
 
 if __name__ == "__main__":

@@ -70,6 +70,34 @@ ENDPOINTS = [
 ]
 
 
+def _tidy_ymax_from_curves(df, groups, xmax: float) -> float:
+    """Compute a tight, tidy ymax for a (time, group, cuminc) DF.
+
+    Takes the maximum cumulative-incidence value across groups at or before
+    xmax, adds 15% headroom, and snaps up to a tidy step (0.0025 / 0.005 /
+    0.01 / 0.02 / 0.05 / 0.1) so the axis carries 4-5 visible ticks.
+    """
+    import math
+    import pandas as pd
+    if not isinstance(df, pd.DataFrame) or len(df) == 0:
+        return 0.05
+    per_group_max = []
+    for g in groups:
+        sub = df[df["group"] == g]
+        sub = sub[sub["time"] <= xmax]
+        if len(sub):
+            per_group_max.append(float(sub["cuminc"].max()))
+    y_obs = max(per_group_max) if per_group_max else 0.005
+    target = max(y_obs * 1.15, 0.005)
+    if target <= 0.015:   step = 0.0025
+    elif target <= 0.025: step = 0.005
+    elif target <= 0.05:  step = 0.01
+    elif target <= 0.15:  step = 0.02
+    elif target <= 0.40:  step = 0.05
+    else:                 step = 0.10
+    return math.ceil(target / step) * step
+
+
 def _bh_fdr(pvals: np.ndarray) -> np.ndarray:
     """BH-FDR adjusted q-values (no statsmodels dependency)."""
     p = np.asarray(pvals, dtype=float)
@@ -215,10 +243,11 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
                 xmax=xmax,
             )
             if adj is not None and len(adj) > 0:
-                # Share the KM ymax so the two figures read consistently
+                # Per-plot tight ylim derived from the ADJUSTED data, not raw KM
+                ymax_adj = _tidy_ymax_from_curves(adj, groups, xmax)
                 fig2 = plot_adjusted_cuminc(adj, groups, PAL4, xmax=xmax,
-                                            ymax=ymax_km,
-                                            title=f"{title} (Clinical-adjusted)")
+                                            ymax=ymax_adj,
+                                            title=f"{title} (Clinical-only adjusted)")
                 fig2.axes[0].set_ylabel(f"Adjusted cumulative incidence (%)", fontsize=10)
                 save_figure(fig2, str(fig_dir / f"section2_{label}_adjcuminc_clinical"))
                 plt.close(fig2)
@@ -226,29 +255,12 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
         except Exception as e:
             LOG.warning("Adjusted cuminc failed for %s: %s", label, e)
 
-    # 6b. +Biomarkers-adjusted cumulative incidence (primary analysis)
+    # 6b. Clinical+Biomarkers-adjusted cumulative incidence (primary analysis)
     if model_name == "+Biomarkers":
         groups = ["Q1", "Q2", "Q3", "Q4"]
         try:
             xmax = int(min(XMAX_YEARS, np.nanpercentile(df_q["time"].values, 99)))
             xmax = max(5, xmax)
-            from lifelines import KaplanMeierFitter
-            import math
-            cuminc_xmax = []
-            for g in groups:
-                sub = df_q[df_q["q"] == g]
-                if len(sub) == 0:
-                    continue
-                k = KaplanMeierFitter().fit(sub["time"], sub["event"])
-                sf = float(k.survival_function_at_times([xmax]).iloc[0])
-                cuminc_xmax.append(1.0 - sf)
-            y_obs = max(cuminc_xmax) if cuminc_xmax else 0.05
-            target = max(y_obs * 1.15, 0.01)
-            step = (0.005 if target <= 0.025 else
-                    0.01 if target <= 0.05 else
-                    0.02 if target <= 0.15 else
-                    0.05 if target <= 0.40 else 0.10)
-            ymax_km = math.ceil(target / step) * step
             cox_q_dropped = cox_q.dropna()
             adj = compute_adjusted_cuminc(
                 fit_q,
@@ -262,9 +274,11 @@ def run_one_endpoint(df_aging: pd.DataFrame, endpoint, model_name: str, covars: 
                 xmax=xmax,
             )
             if adj is not None and len(adj) > 0:
+                # Per-plot tight ylim derived from the ADJUSTED data
+                ymax_adj = _tidy_ymax_from_curves(adj, groups, xmax)
                 fig2 = plot_adjusted_cuminc(adj, groups, PAL4, xmax=xmax,
-                                            ymax=ymax_km,
-                                            title=f"{title} (Biomarkers-adjusted)")
+                                            ymax=ymax_adj,
+                                            title=f"{title} (Clinical + Biomarkers)")
                 fig2.axes[0].set_ylabel(f"Adjusted cumulative incidence (%)", fontsize=10)
                 save_figure(fig2, str(fig_dir / f"section2_{label}_adjcuminc_biomarkers"))
                 plt.close(fig2)
