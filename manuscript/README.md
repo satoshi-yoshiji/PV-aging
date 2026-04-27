@@ -1,10 +1,10 @@
 # Manuscript — PV-aging
 
-Nature Aging-style manuscript for the ETP-aging analysis.
+Manuscript draft for the ETP-aging analysis.
 
 ```
 manuscript/
-├── Manuscript_NatureAging.md   # full manuscript with embedded figures
+├── Manuscript_ETP_aging.v1.md  # full manuscript with embedded figures
 ├── figures/
 │   ├── Figure_1_cross_sectional.png        # composite, 3 panels
 │   ├── Figure_2_master_forest.png          # 13-endpoint forest, faceted by adjustment model
