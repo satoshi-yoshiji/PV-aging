@@ -1,0 +1,15 @@
+step,endpoint,N,events
+df_aging (analytic cohort),ALL,44642,
+drop prevalent + valid time,all_cause_mortality,44642,5707.0
+drop prevalent + valid time,incident_HFRS5,42949,10771.0
+drop prevalent + valid time,zenin_composite,38402,15078.0
+drop prevalent + valid time,hip_fracture,44539,624.0
+drop prevalent + valid time,falls,43617,4335.0
+drop prevalent + valid time,delirium,44635,899.0
+drop prevalent + valid time,pressure_ulcer,44620,650.0
+drop prevalent + valid time,any_CVD_event,37117,14456.0
+drop prevalent + valid time,any_cancer_event,39455,10105.0
+drop prevalent + valid time,incident_T2D,44642,3477.0
+drop prevalent + valid time,incident_HF,44642,1888.0
+drop prevalent + valid time,incident_CKD,44500,2264.0
+drop prevalent + valid time,incident_dementia,44627,1089.0
