@@ -1,0 +1,24 @@
+#!/bin/bash
+#$ -N etp_aging_sec1
+#$ -cwd
+#$ -j y
+#$ -o /humgen/diabetes2/users/satoshi/misc/02.aging/uger/log/
+#$ -l h_rt=02:00:00
+#$ -l h_vmem=16G
+#$ -l os=RedHat8
+#$ -binding linear:1 -R y
+set -euo pipefail
+cd /humgen/diabetes2/users/satoshi/misc/02.aging
+
+source /home/unix/yoshiji/anaconda3/etc/profile.d/conda.sh
+conda activate ckd_analysis
+
+echo "Host: $(hostname)"
+echo "Started: $(date -Is)"
+
+python run_section1_baseline_aging.py \
+  --input /humgen/diabetes2/users/satoshi/misc/01.pv/curated_stats.tsv.gz \
+  --outdir /humgen/diabetes2/users/satoshi/misc/02.aging/results \
+  --seed 42
+
+echo "Finished: $(date -Is)"

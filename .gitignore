@@ -1,0 +1,18 @@
+# Environments
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+*.swp
+
+# Local UGER logs and scratch
+uger/log/
+log/
+_smoke_test.py
+
+# Data — never commit individual-level UKB data
+*.tsv.gz
+*.csv.gz
+*.rds
+*.bgen
+data/
