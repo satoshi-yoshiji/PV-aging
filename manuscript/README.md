@@ -21,18 +21,18 @@ manuscript/
 │   ├── section1_*.png                      # raw per-figure PNGs (Section 1)
 │   └── section2_<endpoint>_adjcuminc_{biomarkers,clinical}.png   # per-endpoint KM/cuminc by adjustment model
 └── supplementary_tables/
-    ├── section1_baseline_hfrs_OLS.csv          # Suppl. Table S1
-    ├── section1_prevalent_syndromes_OR.csv     # Suppl. Table S2
-    ├── section1_multimorbidity_count.csv       # Suppl. Table S3
-    ├── section1_bioage_proxy.csv               # Suppl. Table S4
-    ├── section2_cohort_flow.csv                # Suppl. Table S5
-    ├── section2_hfrs_top_contributors.csv      # Suppl. Table S6
-    ├── section2_per_sd.csv                     # Suppl. Table S7 (per-SD HRs)
+    ├── Table_S1_baseline_HFRS_OLS.csv          # Suppl. Table S1
+    ├── Table_S2_prevalent_syndromes_OR.csv     # Suppl. Table S2
+    ├── Table_S3_multimorbidity_count.csv       # Suppl. Table S3
+    ├── Table_S4_bioage_proxy.csv               # Suppl. Table S4
+    ├── Table_S5_cohort_flow.csv                # Suppl. Table S5
+    ├── Table_S6_HFRS_top_contributors.csv      # Suppl. Table S6
+    ├── Table_S7_per_SD_HRs.csv                     # Suppl. Table S7 (per-SD HRs)
     ├── Table_S9_ICD10_endpoint_definitions.csv # ICD-10 patterns + regex used by the parser
     ├── Table_S10_Gilbert_HFRS_codes.csv        # full 109-code Gilbert 2018 HFRS table + weights
     ├── Table_S11_adjustment_models.csv         # covariate sets per adjustment model
-    ├── section2_quartiles.csv                  # Suppl. Table S7 (quartile HRs)
-    └── section2_zenin_components.csv           # Suppl. Table S8
+    ├── Table_S7_quartile_HRs.csv                  # Suppl. Table S7 (quartile HRs)
+    └── Table_S8_Zenin_components.csv           # Suppl. Table S8
 ```
 
 The original PDF figures (300-DPI vector) live in `../results/figures/`; the
