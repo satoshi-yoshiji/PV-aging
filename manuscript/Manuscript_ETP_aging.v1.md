@@ -58,7 +58,7 @@ Across the 13 prospective time-to-event endpoints (**Table 1**, **Fig. 2**, **Su
 
 ![](figures/Table_1.png)
 
-**Table 1.** Per-SD endotrophin hazard ratios across 13 prospective endpoints, primary Clinical-plus-Biomarkers model (age, sex, centre, processing time, batch, BMI, eGFR, SBP, smoking, diabetes, hypertension, dyslipidaemia, HbA1c, HDL-C, total cholesterol, CRP, NT-proBNP). Any incident CVD event and any incident cancer event are ICD-10-event substitutes for cause-specific mortality (UK Biobank field 40001 underlying cause-of-death code is unavailable in the curated dataset). Raw and BH-q-values for the primary model and parallel Clinical-only and Base sensitivity analyses are in Supplementary Table S7.
+**Table 1.** Per-SD endotrophin hazard ratios across 13 prospective endpoints under all three nested adjustment models. **Base** = age, sex, assessment centre, time-to-Olink-processing, Olink Batch. **Clinical** = Base + BMI, eGFR, SBP, ever-smoker, diabetes, hypertension, dyslipidaemia, HbA1c, HDL-C, total cholesterol. **Clinical + Biomarkers** (pre-specified primary analysis) = Clinical + CRP and NT-proBNP. Events shown are for the primary Clinical + Biomarkers risk set (the smallest of the three because of additional CRP / NT-proBNP completeness). *Any incident CVD event and any incident cancer event are ICD-10-event substitutes for cause-specific mortality (UK Biobank field 40001 underlying cause-of-death code is unavailable in the curated dataset). Raw and BH-q-values for each model are in Supplementary Table S7.
 
 ### Endotrophin predicts mortality, incident frailty and healthspan compression
 
