@@ -42,7 +42,9 @@ The dose-response was visible in the raw HFRS distribution: the proportion of pa
 
 Two parallel multimorbidity counts reinforced the result: per-SD endotrophin was associated with a **2.4 % rise** in self-reported chronic-condition count (RR 1.024, 1.008 - 1.040; *P* = 2.6e-3) and a **16 % rise** in prevalent ICD-defined disease count across eight common conditions (HF, MI, COPD, stroke, dementia, T2D, cancer, CKD; RR 1.16, 1.12 - 1.20; *P* = 4.8e-19), in the Clinical-plus-Biomarkers model. A composite biological-age proxy -- a sign-flipped z-sum of age, eGFR, CRP, HbA1c, HDL-C, total cholesterol and NT-proBNP -- also rose monotonically with endotrophin (beta = +0.43 SD per 1-SD endotrophin; *P* < 1e-300).
 
-![Figure 1 -- Time evolution of cumulative Hospital Frailty Risk Score across follow-up. Alluvial diagram of cumulative HFRS bin (0 / 0-1 / 1-3 / 3-5 / >5) at years 0, 4, 8 and 12 across all 44,642 analytic-cohort participants. Flow widths are proportional to the joint distribution at adjacent time points and are coloured by destination bin. The per-SD endotrophin associations with continuous baseline HFRS and with prevalent frailty-syndrome ICD-10 flags are shown as Suppl. Figs. S4 and S5.](figures/Figure_1_HFRS_alluvial.png)
+![](figures/Figure_1_HFRS_alluvial.png)
+
+**Figure 1.** Time evolution of cumulative Hospital Frailty Risk Score across follow-up. Alluvial diagram of cumulative HFRS bin (0 / 0-1 / 1-3 / 3-5 / >5) at years 0, 4, 8 and 12 across all 44,642 analytic-cohort participants. Flow widths are proportional to the joint distribution at adjacent time points and are coloured by destination bin. The per-SD endotrophin associations with continuous baseline HFRS and with prevalent frailty-syndrome ICD-10 flags are shown as Suppl. Figs. S4 and S5.
 
 The cross-sectional findings argue that endotrophin is enriched in older, more frail and more multimorbid participants at the moment of measurement -- that is, a state-marker as well as a forward-looking risk marker.
 
@@ -50,9 +52,13 @@ The cross-sectional findings argue that endotrophin is enriched in older, more f
 
 Across the 13 prospective time-to-event endpoints (**Table 1**, **Fig. 2**, **Supplementary Table S7**), per-SD baseline endotrophin was associated with every outcome under the pre-specified primary Clinical-plus-Biomarkers adjustment for age, sex, centre, processing time, batch, BMI, eGFR, SBP, smoking, diabetes, hypertension, dyslipidaemia, HbA1c, HDL-C, total cholesterol, **CRP and NT-proBNP**, with the sole exception of incident dementia (HR 1.05; *P* = 0.09). Benjamini-Hochberg false-discovery-rate control within the primary model (26 family tests: 13 endpoints × {per-SD, p-trend}) left every per-SD association except dementia below *q* = 0.001.
 
-![Figure 2 -- Master forest of per-SD endotrophin across 13 prospective endpoints, faceted by adjustment model. The right-most "+Biomarkers" panel is the pre-specified primary analysis (Clinical + CRP + NT-proBNP). Endpoints are sorted within each panel by hazard-ratio magnitude. Vertical dashed line, HR = 1.](figures/Figure_2_master_forest.png)
+![](figures/Figure_2_master_forest.png)
 
-![Table 1. Per-SD endotrophin hazard ratios across 13 prospective endpoints, primary Clinical-plus-Biomarkers model (age, sex, centre, processing time, batch, BMI, eGFR, SBP, smoking, diabetes, hypertension, dyslipidaemia, HbA1c, HDL-C, total cholesterol, CRP, NT-proBNP). Any incident CVD event and any incident cancer event are ICD-10-event substitutes for cause-specific mortality (UK Biobank field 40001 underlying cause-of-death code is unavailable in the curated dataset). Raw and BH-q-values for the primary model and parallel Clinical-only and Base sensitivity analyses are in Supplementary Table S7.](figures/Table_1.png)
+**Figure 2.** Master forest of per-SD endotrophin across 13 prospective endpoints, faceted by adjustment model. The right-most "+Biomarkers" panel is the pre-specified primary analysis (Clinical + CRP + NT-proBNP). Endpoints are sorted within each panel by hazard-ratio magnitude. Vertical dashed line, HR = 1.
+
+![](figures/Table_1.png)
+
+**Table 1.** Per-SD endotrophin hazard ratios across 13 prospective endpoints, primary Clinical-plus-Biomarkers model (age, sex, centre, processing time, batch, BMI, eGFR, SBP, smoking, diabetes, hypertension, dyslipidaemia, HbA1c, HDL-C, total cholesterol, CRP, NT-proBNP). Any incident CVD event and any incident cancer event are ICD-10-event substitutes for cause-specific mortality (UK Biobank field 40001 underlying cause-of-death code is unavailable in the curated dataset). Raw and BH-q-values for the primary model and parallel Clinical-only and Base sensitivity analyses are in Supplementary Table S7.
 
 ### Endotrophin predicts mortality, incident frailty and healthspan compression
 
@@ -66,13 +72,17 @@ For the four primary endpoints, the dose-response by endotrophin quartile under 
 
 **Incident CKD** (1,679 events): per-SD HR 1.38 (1.32 - 1.44), *P* = 2.3e-47, closely reproducing the published per-SD CKD HR of 1.53 from our earlier UKB-PPP analysis[20] (which used a different ICD parser and an eGFR-stratified analytic cohort, with no CRP / NT-proBNP adjustment) and providing a positive control that the new ICD-10 long-form parser is well-calibrated.
 
-![Figure 3 -- Adjusted (Clinical + CRP + NT-proBNP) cumulative incidence by endotrophin quartile (Q1 reference) for the four primary endpoints. (a) All-cause mortality. (b) HFRS-positive admission (>=5). (c) Zenin healthspan composite. (d) Incident CKD. The corresponding Clinical-only (without CRP/NT-proBNP) curves are in **Supplementary Fig. S1**.](figures/Figure_3_primary_KM.png)
+![](figures/Figure_3_primary_KM.png)
+
+**Figure 3.** Adjusted (Clinical + CRP + NT-proBNP) cumulative incidence by endotrophin quartile (Q1 reference) for the four primary endpoints. (a) All-cause mortality. (b) HFRS-positive admission (>=5). (c) Zenin healthspan composite. (d) Incident CKD. The corresponding Clinical-only (without CRP/NT-proBNP) curves are in **Supplementary Fig. S1**.
 
 ### Each frailty-syndrome hospitalisation tracks endotrophin
 
 Modelled separately, the four constituent frailty-syndrome ICD endpoints retained per-SD endotrophin associations under the primary adjustment of HR 1.11 (hip fracture, S72), 1.16 (falls, W00-W19/R29.6), 1.13 (delirium, F05) and **1.26** (pressure ulcer, L89), all with monotonic dose-response across quartiles (**Fig. 4**, **Supplementary Table S7**). Pressure ulcer, the largest of the four, was the most resistant to CRP/NT-proBNP adjustment (per-SD HR drops only marginally from the Clinical-only 1.31 to the primary 1.26), suggesting that endotrophin captures an axis of skin-and-soft-tissue resilience that is not fully explained by either inflammation or natriuretic-peptide stress.
 
-![Figure 4 -- Adjusted cumulative incidence by endotrophin quartile under the primary Clinical-plus-Biomarkers model for the four frailty-syndrome hospitalisations. (a) Hip fracture. (b) Falls. (c) Delirium. (d) Pressure ulcer. Clinical-only versions of these curves are in **Supplementary Fig. S2**.](figures/Figure_4_frailty_syndromes_KM.png)
+![](figures/Figure_4_frailty_syndromes_KM.png)
+
+**Figure 4.** Adjusted cumulative incidence by endotrophin quartile under the primary Clinical-plus-Biomarkers model for the four frailty-syndrome hospitalisations. (a) Hip fracture. (b) Falls. (c) Delirium. (d) Pressure ulcer. Clinical-only versions of these curves are in **Supplementary Fig. S2**.
 
 ### Disease-panel and ICD-event substitutes for cause-specific mortality
 
@@ -80,7 +90,9 @@ The pre-specified incident-disease panel produced effect sizes consistent with t
 
 We were unable to compute true cause-specific (CVD or cancer) mortality because UK Biobank field 40001 (underlying cause-of-death ICD-10 code) was not in the curated dataset. As a transparent surrogate, we report the first incident I00-I99 event ("any-CVD event") and the first incident C00-D48 event ("any-cancer event") from the HES record. Both retained nominal significance in the primary model: HR 1.08 (1.06 - 1.11), *P* = 2.5e-10 for any-CVD and HR 1.05 (1.02 - 1.08), *P* = 8.6e-4 for any-cancer, with the caveat that these are first-event composites rather than deaths from those causes.
 
-![Figure 5 -- Adjusted cumulative incidence by endotrophin quartile under the primary Clinical-plus-Biomarkers model for the disease panel and the cause-specific-mortality ICD-event substitutes. (a) Incident HF. (b) Incident T2D. (c) Incident dementia. (d) Any incident CVD event. (e) Any incident cancer event. Clinical-only versions of these curves are in **Supplementary Fig. S3**.](figures/Figure_5_disease_panel_KM.png)
+![](figures/Figure_5_disease_panel_KM.png)
+
+**Figure 5.** Adjusted cumulative incidence by endotrophin quartile under the primary Clinical-plus-Biomarkers model for the disease panel and the cause-specific-mortality ICD-event substitutes. (a) Incident HF. (b) Incident T2D. (c) Incident dementia. (d) Any incident CVD event. (e) Any incident cancer event. Clinical-only versions of these curves are in **Supplementary Fig. S3**.
 
 ### Robustness across adjustment levels and dose-response
 
@@ -262,14 +274,24 @@ The following supplementary tables and figures are deposited alongside the manus
 
 The Clinical-only-adjusted versions of Figs. 3 - 5 (i.e. the same Cox-modelled cumulative-incidence curves but **without** CRP and NT-proBNP in the adjustment set) are reproduced below as Suppl. Figs. S1 - S3. They are presented for transparency: the differences between the primary (Clinical + Biomarkers) and Clinical-only curves quantify how much of the endotrophin -> endpoint signal is mediated by CRP and NT-proBNP.
 
-![Supplementary Figure S1 -- Clinical-only-adjusted cumulative incidence by endotrophin quartile (Q1 reference) for the four primary endpoints (mirrors Fig. 3 but omits CRP and NT-proBNP from the adjustment set). (a) All-cause mortality. (b) HFRS-positive admission (>=5). (c) Zenin healthspan composite. (d) Incident CKD.](figures/Figure_S1_primary_KM_clinical.png)
+![](figures/Figure_S1_primary_KM_clinical.png)
 
-![Supplementary Figure S2 -- Clinical-only-adjusted cumulative incidence by endotrophin quartile for the four frailty-syndrome hospitalisations (mirrors Fig. 4). (a) Hip fracture. (b) Falls. (c) Delirium. (d) Pressure ulcer.](figures/Figure_S2_frailty_syndromes_KM_clinical.png)
+**Supplementary Figure S1.** Clinical-only-adjusted cumulative incidence by endotrophin quartile (Q1 reference) for the four primary endpoints (mirrors Fig. 3 but omits CRP and NT-proBNP from the adjustment set). (a) All-cause mortality. (b) HFRS-positive admission (>=5). (c) Zenin healthspan composite. (d) Incident CKD.
 
-![Supplementary Figure S3 -- Clinical-only-adjusted cumulative incidence by endotrophin quartile for the disease panel and the cause-specific-mortality ICD-event substitutes (mirrors Fig. 5). (a) Incident HF. (b) Incident T2D. (c) Incident dementia. (d) Any incident CVD event. (e) Any incident cancer event.](figures/Figure_S3_disease_panel_KM_clinical.png)
+![](figures/Figure_S2_frailty_syndromes_KM_clinical.png)
 
-![Supplementary Figure S4 -- beta-per-SD endotrophin for continuous baseline HFRS (2-year window) across the three nested adjustment models (Base / Clinical-only / Clinical + Biomarkers). Centre dot = point estimate; whiskers = 95 % confidence interval. The signal is essentially preserved across the three models, demonstrating that the endotrophin-frailty association is not explained by the clinical or biomarker covariate set.](figures/Figure_S4_baseline_HFRS_beta_forest.png)
+**Supplementary Figure S2.** Clinical-only-adjusted cumulative incidence by endotrophin quartile for the four frailty-syndrome hospitalisations (mirrors Fig. 4). (a) Hip fracture. (b) Falls. (c) Delirium. (d) Pressure ulcer.
 
-![Supplementary Figure S5 -- Logistic-regression OR-per-SD endotrophin for prevalent frailty-syndrome ICD-10 flags recorded at or before the assessment-centre visit, in the primary Clinical + Biomarkers model. Each row is a separate prevalent-syndrome outcome; whiskers = 95 % confidence interval. Prevalent delirium and pressure ulcer were too sparse for stable estimation and are omitted.](figures/Figure_S5_prevalent_syndromes_OR_forest.png)
+![](figures/Figure_S3_disease_panel_KM_clinical.png)
+
+**Supplementary Figure S3.** Clinical-only-adjusted cumulative incidence by endotrophin quartile for the disease panel and the cause-specific-mortality ICD-event substitutes (mirrors Fig. 5). (a) Incident HF. (b) Incident T2D. (c) Incident dementia. (d) Any incident CVD event. (e) Any incident cancer event.
+
+![](figures/Figure_S4_baseline_HFRS_beta_forest.png)
+
+**Supplementary Figure S4.** beta-per-SD endotrophin for continuous baseline HFRS (2-year window) across the three nested adjustment models (Base / Clinical-only / Clinical + Biomarkers). Centre dot = point estimate; whiskers = 95 % confidence interval. The signal is essentially preserved across the three models, demonstrating that the endotrophin-frailty association is not explained by the clinical or biomarker covariate set.
+
+![](figures/Figure_S5_prevalent_syndromes_OR_forest.png)
+
+**Supplementary Figure S5.** Logistic-regression OR-per-SD endotrophin for prevalent frailty-syndrome ICD-10 flags recorded at or before the assessment-centre visit, in the primary Clinical + Biomarkers model. Each row is a separate prevalent-syndrome outcome; whiskers = 95 % confidence interval. Prevalent delirium and pressure ulcer were too sparse for stable estimation and are omitted.
 
 The 39 individual KM and adjusted-cumulative-incidence PDFs (one per endpoint × {raw KM, Clinical-only adjcuminc, Clinical + Biomarkers adjcuminc}) are deposited at `results/figures/`; the per-endpoint source-data CSVs are at `results/source_data/`.
