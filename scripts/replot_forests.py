@@ -17,8 +17,30 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
 import numpy as np
 import pandas as pd
+
+
+def _set_clean_ticks(ax, x_log: bool, xmin: float, xmax: float, ref: float):
+    """Apply plain-number tick labels (no '10^0' notation) and a sensible
+    set of major-tick positions for either log or linear axes."""
+    if x_log:
+        # Pick a tidy set of HR ticks within [xmin, xmax]
+        candidates = [0.5, 0.7, 0.8, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0]
+        ticks = [t for t in candidates if xmin * 0.999 <= t <= xmax * 1.001]
+        if ref is not None and ref not in ticks:
+            ticks = sorted(ticks + [ref])
+        ax.xaxis.set_major_locator(FixedLocator(ticks))
+        ax.xaxis.set_minor_locator(NullLocator())
+    else:
+        # Linear axis: 5 ticks spanning the range
+        ticks = np.linspace(xmin, xmax, 5)
+        ax.xaxis.set_major_locator(FixedLocator(ticks))
+        ax.xaxis.set_minor_locator(NullLocator())
+    ax.xaxis.set_major_formatter(FuncFormatter(
+        lambda v, _pos: (f"{v:.1f}".rstrip("0").rstrip(".") if abs(v) < 10 else f"{v:.0f}")
+    ))
 
 ROOT = Path("/humgen/diabetes2/users/satoshi/misc/02.aging")
 PDF_DIR = ROOT / "results" / "figures"
@@ -50,6 +72,9 @@ def forest_panel(ax, df, ratio_col="HR", lci_col="LCI", uci_col="UCI",
         ax.set_xscale("log")
     if xlim is not None:
         ax.set_xlim(*xlim)
+    # Plain-number x-tick labels (no '10^0')
+    xlo, xhi = ax.get_xlim()
+    _set_clean_ticks(ax, x_log=x_log, xmin=xlo, xmax=xhi, ref=ref)
     ax.set_yticks(ys)
     ax.set_yticklabels(df[label_col].values, fontsize=9)
     ax.set_xlabel(xlabel, fontsize=10)

@@ -422,6 +422,16 @@ def main(args):
                 ax.set_yticklabels(sub["title"], fontsize=9)
                 ax.set_xscale("log")
                 ax.set_xlim(xmin, xmax)
+                # Plain-number x-tick labels (no scientific notation)
+                from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
+                _candidates = [0.5, 0.7, 0.8, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+                _ticks = [t for t in _candidates if xmin * 0.999 <= t <= xmax * 1.001]
+                if 1.0 not in _ticks:
+                    _ticks = sorted(_ticks + [1.0])
+                ax.xaxis.set_major_locator(FixedLocator(_ticks))
+                ax.xaxis.set_minor_locator(NullLocator())
+                ax.xaxis.set_major_formatter(FuncFormatter(
+                    lambda v, _pos: f"{v:.1f}".rstrip("0").rstrip(".")))
                 ax.set_xlabel("HR per SD endotrophin", fontsize=10)
                 ax.set_title(model_label, fontsize=11, pad=6)
                 for spine in ("top", "right"):
