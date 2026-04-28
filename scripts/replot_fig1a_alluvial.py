@@ -127,9 +127,12 @@ def alluvial(ax, columns_pct, transitions, x_positions,
                 y2_lo = bin_y_lo[i + 1, b] + used_at_tp1[b]
                 y2_hi = y2_lo + w
                 used_at_tp1[b] += w
-                # Cubic-Bezier ribbon coloured by destination bin
+                # Ribbon coloured by SOURCE bin (origin), so a participant
+                # moving from HFRS=0 (grey) to HFRS>5 (dark red) is shown
+                # as a grey flow -- the colour communicates where the
+                # participant came from.
                 draw_flow(ax, x1, y1_lo, y1_hi, x2, y2_lo, y2_hi,
-                          color=colors[b], alpha=0.55)
+                          color=colors[a], alpha=0.55)
 
     # Draw the bin stacks (vertical bars at each time point)
     for i, x in enumerate(x_positions):
