@@ -8,7 +8,7 @@ manuscript/
 ├── Manuscript_ETP_aging.v1.pdf # mdpdf-rendered PDF (Liberation Serif 12pt, 1.5 line-height, letter, 1in margins)
 ├── figures/
 │   ├── Table_1.png                         # primary Cox HRs across 13 endpoints (rendered as image; mdpdf doesn't parse markdown tables)
-│   ├── Figure_1_cross_sectional.png        # composite, 2 panels (HFRS-beta forest + prevalent-syndrome OR forest)
+│   ├── Figure_1_cross_sectional.png        # alluvial of cumulative HFRS bin at years 0/4/8/12 (full cohort)
 │   ├── Figure_2_master_forest.png          # 13-endpoint forest, faceted by adjustment model
 │   ├── Figure_3_primary_KM.png             # PRIMARY (Clinical+Biomarkers): mortality, HFRS, Zenin, CKD
 │   ├── Figure_4_frailty_syndromes_KM.png   # PRIMARY: hip fx, falls, delirium, ulcer
@@ -17,6 +17,8 @@ manuscript/
 │   ├── Figure_S1_primary_KM_clinical.png   # SUPPL: Fig 3 with Clinical-only (no CRP/NT-proBNP)
 │   ├── Figure_S2_frailty_syndromes_KM_clinical.png  # SUPPL: Fig 4 Clinical-only
 │   ├── Figure_S3_disease_panel_KM_clinical.png      # SUPPL: Fig 5 Clinical-only
+│   ├── Figure_S4_baseline_HFRS_beta_forest.png      # SUPPL: beta-per-SD HFRS forest, was Fig 1b
+│   ├── Figure_S5_prevalent_syndromes_OR_forest.png  # SUPPL: OR-per-SD prevalent-syndrome forest, was Fig 1c
 │   ├── section1_*.png                      # raw per-figure PNGs (Section 1)
 │   └── section2_<endpoint>_adjcuminc_{biomarkers,clinical}.png   # per-endpoint KM/cuminc by adjustment model
 └── supplementary/
