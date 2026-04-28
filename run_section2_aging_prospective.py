@@ -394,27 +394,43 @@ def main(args):
     # Master forest: per-SD HR across endpoints, faceted by adjustment model
     try:
         if not df_sd.empty:
-            fig, axes = plt.subplots(1, 3, figsize=(13, 6.5), sharey=True)
-            for ax, (model, _) in zip(axes, ADJ_MODELS):
-                sub = df_sd[df_sd["model"] == model].copy()
+            # Sort by Clinical+Biomarkers HR for the y-axis order
+            bio = df_sd[df_sd["model"] == "+Biomarkers"].copy().sort_values("HR_per_SD")
+            order = list(bio["title"])
+            xmin = max(0.5, float(np.nanmin(df_sd["LCI_per_SD"])) * 0.95)
+            xmax = max(float(np.nanmax(df_sd["UCI_per_SD"])) * 1.05, 2.5)
+            panel_labels = [("Base", "Base"),
+                            ("+Clinical", "Clinical"),
+                            ("+Biomarkers", "Clinical + Biomarkers")]
+            fig, axes = plt.subplots(1, 3, figsize=(13.5, 5.6), sharey=True)
+            for ax, (model_id, model_label) in zip(axes, panel_labels):
+                sub = df_sd[df_sd["model"] == model_id].copy()
                 if sub.empty:
                     continue
-                sub = sub.sort_values("HR_per_SD")
-                sub["label"] = sub["title"]
-                hr_df = sub.rename(columns={"HR_per_SD": "HR", "LCI_per_SD": "LCI",
-                                            "UCI_per_SD": "UCI", "P_per_SD": "P"})
-                ys = np.arange(len(hr_df))
-                ax.errorbar(hr_df["HR"], ys,
-                            xerr=[hr_df["HR"] - hr_df["LCI"], hr_df["UCI"] - hr_df["HR"]],
-                            fmt="o", color="#222", ecolor="#666", capsize=2)
-                ax.axvline(1.0, color="#bbb", linestyle="--")
+                sub["title"] = pd.Categorical(sub["title"], categories=order, ordered=True)
+                sub = sub.sort_values("title").reset_index(drop=True)
+                ys = np.arange(len(sub))
+                # Thin CI line, no caps
+                for y, lo, hi in zip(ys, sub["LCI_per_SD"].values, sub["UCI_per_SD"].values):
+                    ax.plot([lo, hi], [y, y], color="#444444", linewidth=0.9,
+                            solid_capstyle="butt", zorder=2)
+                # Small filled dot
+                ax.scatter(sub["HR_per_SD"].values, ys, s=22, color="#222222",
+                           zorder=3, edgecolors="none")
+                ax.axvline(1.0, color="#bbbbbb", linestyle="--", linewidth=0.8, zorder=1)
                 ax.set_yticks(ys)
-                ax.set_yticklabels(hr_df["label"], fontsize=8)
+                ax.set_yticklabels(sub["title"], fontsize=9)
                 ax.set_xscale("log")
-                ax.set_xlim(0.6, 3.0)
-                ax.set_xlabel("HR per SD ETP")
-                ax.set_title(model, fontsize=10)
-            fig.suptitle("ETP and time-to-event endpoints (UKB-PPP)", fontsize=11)
+                ax.set_xlim(xmin, xmax)
+                ax.set_xlabel("HR per SD endotrophin", fontsize=10)
+                ax.set_title(model_label, fontsize=11, pad=6)
+                for spine in ("top", "right"):
+                    ax.spines[spine].set_visible(False)
+                ax.tick_params(axis="x", labelsize=9)
+            for ax in axes[1:]:
+                ax.tick_params(axis="y", labelleft=False)
+            fig.suptitle("Per-SD endotrophin associations across 13 prospective endpoints",
+                         fontsize=12, y=0.995)
             plt.tight_layout()
             save_figure(fig, str(fig_dir / "section2_master_forest"))
             plt.close(fig)
