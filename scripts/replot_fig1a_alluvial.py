@@ -161,26 +161,26 @@ def alluvial(ax, columns_pct, transitions, x_positions,
         ax.spines[spine].set_visible(False)
 
 
-def draw_flow(ax, x1, y1_lo, y1_hi, x2, y2_lo, y2_hi, color, alpha):
-    cx1 = x1 + (x2 - x1) * 0.5
-    cx2 = x1 + (x2 - x1) * 0.5
-    verts = [
-        (x1, y1_hi),
-        (cx1, y1_hi), (cx2, y2_hi), (x2, y2_hi),
-        (x2, y2_lo),
-        (cx2, y2_lo), (cx1, y1_lo), (x1, y1_lo),
-        (x1, y1_hi),
-    ]
-    codes = [
-        MplPath.MOVETO,
-        MplPath.CURVE4, MplPath.CURVE4, MplPath.CURVE4,
-        MplPath.LINETO,
-        MplPath.CURVE4, MplPath.CURVE4, MplPath.CURVE4,
-        MplPath.CLOSEPOLY,
-    ]
-    path = MplPath(verts, codes)
-    patch = PathPatch(path, facecolor=color, edgecolor='none', alpha=alpha)
-    ax.add_patch(patch)
+def draw_flow(ax, x1, y1_lo, y1_hi, x2, y2_lo, y2_hi, color, alpha,
+              n_pts: int = 200, k: float = 8.0):
+    """Draw a smooth alluvial ribbon between (x1, [y1_lo, y1_hi]) and
+    (x2, [y2_lo, y2_hi]) using a high-resolution tanh-sigmoid S-curve
+    on the top and bottom edges (closer to ggalluvial's geom_alluvium
+    than a 4-point cubic-Bezier path).
+
+    n_pts : number of sample points along each edge (200 -> very smooth).
+    k     : sigmoid steepness in normalised x; 6-10 reads well at this scale.
+    """
+    t = np.linspace(0.0, 1.0, n_pts)
+    s = 0.5 * (1 + np.tanh((t - 0.5) * k))
+    xs = x1 + (x2 - x1) * t
+    top_ys = y1_hi + (y2_hi - y1_hi) * s
+    bot_ys = y1_lo + (y2_lo - y1_lo) * s
+    # Build a closed polygon: top edge L->R, then bottom edge R->L
+    polygon_x = np.concatenate([xs, xs[::-1]])
+    polygon_y = np.concatenate([top_ys, bot_ys[::-1]])
+    ax.fill(polygon_x, polygon_y, facecolor=color, edgecolor="none",
+            alpha=alpha, antialiased=True, linewidth=0)
 
 
 def main():
@@ -263,7 +263,7 @@ def main():
     pdf_path = PDF_DIR / "section1_hfrs_alluvial.pdf"
     png_path = PNG_DIR / "section1_hfrs_alluvial.png"
     fig.savefig(pdf_path, dpi=300, bbox_inches="tight")
-    fig.savefig(png_path, dpi=200, bbox_inches="tight")
+    fig.savefig(png_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {pdf_path}")
     print(f"Saved {png_path}")
