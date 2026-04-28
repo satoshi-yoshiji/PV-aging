@@ -48,7 +48,7 @@ PNG_DIR = ROOT / "manuscript" / "figures"
 
 # 5-tone palette consistent with the previous Fig 1a stacked bar
 BIN_LABELS = ["0", "(0, 1]", "(1, 3]", "(3, 5]", ">5"]
-BIN_COLORS = ["#dcdcdc", "#f4cb91", "#f1a340", "#d7191c", "#7a0103"]
+BIN_COLORS = ["#b8e6b8", "#f4cb91", "#f1a340", "#d7191c", "#7a0103"]
 BIN_EDGES = [-1e-6, 1e-6, 1.0, 3.0, 5.0, np.inf]
 
 YEARS = [0, 4, 8, 12]
