@@ -8,7 +8,7 @@ manuscript/
 ├── Manuscript_ETP_aging.v1.pdf # mdpdf-rendered PDF (Liberation Serif 12pt, 1.5 line-height, letter, 1in margins)
 ├── figures/
 │   ├── Table_1.png                         # primary Cox HRs across 13 endpoints (rendered as image; mdpdf doesn't parse markdown tables)
-│   ├── Figure_1_cross_sectional.png        # alluvial of cumulative HFRS bin at years 0/4/8/12 (full cohort)
+│   ├── Figure_1_HFRS_alluvial.png          # alluvial of cumulative HFRS bin at years 0/4/8/12 (full cohort)
 │   ├── Figure_2_master_forest.png          # 13-endpoint forest, faceted by adjustment model
 │   ├── Figure_3_primary_KM.png             # PRIMARY (Clinical+Biomarkers): mortality, HFRS, Zenin, CKD
 │   ├── Figure_4_frailty_syndromes_KM.png   # PRIMARY: hip fx, falls, delirium, ulcer
