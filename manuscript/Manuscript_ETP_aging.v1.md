@@ -38,11 +38,11 @@ Baseline cumulative HFRS, computed as the sum of the 109 Gilbert *et al.* 2018 w
 
 Prevalent frailty-syndrome ICD codes recorded at or before baseline showed the same pattern: per-SD endotrophin was associated with **OR 2.27 (1.78 - 2.88)** for prior hip fracture, **1.29 (1.18 - 1.40)** for prior falls and **1.33 (1.22 - 1.45)** for any prior frailty syndrome (all Clinical-plus-Biomarkers). Prevalent delirium (5 cases) and pressure ulcer (14 cases) were too sparse for stable estimation.
 
-The dose-response was visible in the raw HFRS distribution: the proportion of participants with HFRS = 0 (i.e. no relevant ICD code in the two-year baseline window) fell from 94.5 % in ETP quartile 1 to 86.2 % in quartile 4, while the proportion crossing the Gilbert intermediate-risk threshold (HFRS >= 5) rose from 0.35 % in Q1 to 1.58 % in Q4 -- a ~4.5-fold increase (**Suppl. Fig. S0**). Across all 44,642 participants, the cumulative HFRS distribution shifted markedly during follow-up (**Fig. 1**): the share with HFRS = 0 fell from 91.6 % at baseline to 47.1 % at year 12, while the share with HFRS >= 5 rose from 0.7 % to 20.1 %.
+The dose-response was visible in the raw HFRS distribution: the proportion of participants with HFRS = 0 (i.e. no relevant ICD code in the two-year baseline window) fell from 94.5 % in ETP quartile 1 to 86.2 % in quartile 4, while the proportion crossing the Gilbert intermediate-risk threshold (HFRS >= 5) rose from 0.35 % in Q1 to 1.58 % in Q4 -- a ~4.5-fold increase. Across all 44,642 participants, the cumulative HFRS distribution shifted markedly during follow-up (**Fig. 1**): the share with HFRS = 0 fell from 91.6 % at baseline to 47.1 % at year 12, while the share with HFRS >= 5 rose from 0.7 % to 20.1 %.
 
 Two parallel multimorbidity counts reinforced the result: per-SD endotrophin was associated with a **2.4 % rise** in self-reported chronic-condition count (RR 1.024, 1.008 - 1.040; *P* = 2.6e-3) and a **16 % rise** in prevalent ICD-defined disease count across eight common conditions (HF, MI, COPD, stroke, dementia, T2D, cancer, CKD; RR 1.16, 1.12 - 1.20; *P* = 4.8e-19), in the Clinical-plus-Biomarkers model. A composite biological-age proxy -- a sign-flipped z-sum of age, eGFR, CRP, HbA1c, HDL-C, total cholesterol and NT-proBNP -- also rose monotonically with endotrophin (beta = +0.43 SD per 1-SD endotrophin; *P* < 1e-300).
 
-![Figure 1 -- Time evolution of cumulative Hospital Frailty Risk Score across follow-up. Alluvial diagram of cumulative HFRS bin (0 / 0-1 / 1-3 / 3-5 / >5) at years 0, 4, 8 and 12 across all 44,642 analytic-cohort participants. Flow widths are proportional to the joint distribution at adjacent time points and are coloured by destination bin. The complementary stratified-by-ETP-quartile baseline HFRS distribution and the per-SD endotrophin associations with continuous baseline HFRS and with prevalent frailty-syndrome ICD-10 flags are shown as Suppl. Figs. S0, S4 and S5.](figures/Figure_1_HFRS_alluvial.png)
+![Figure 1 -- Time evolution of cumulative Hospital Frailty Risk Score across follow-up. Alluvial diagram of cumulative HFRS bin (0 / 0-1 / 1-3 / 3-5 / >5) at years 0, 4, 8 and 12 across all 44,642 analytic-cohort participants. Flow widths are proportional to the joint distribution at adjacent time points and are coloured by destination bin. The per-SD endotrophin associations with continuous baseline HFRS and with prevalent frailty-syndrome ICD-10 flags are shown as Suppl. Figs. S4 and S5.](figures/Figure_1_HFRS_alluvial.png)
 
 The cross-sectional findings argue that endotrophin is enriched in older, more frail and more multimorbid participants at the moment of measurement -- that is, a state-marker as well as a forward-looking risk marker.
 
@@ -239,7 +239,9 @@ Individual-level UK Biobank data are not redistributable. Access can be requeste
 
 ## Supplementary Materials
 
-The following supplementary tables and figures are deposited alongside the manuscript at `manuscript/supplementary/` and `manuscript/figures/` in the repository:
+The following supplementary tables and figures are deposited alongside the manuscript at `manuscript/supplementary_tables/` and `manuscript/figures/` in the repository:
+
+### Supplementary tables (results)
 
 - **Supplementary Table S1.** `section1_baseline_hfrs_OLS.csv` -- OLS beta-per-SD endotrophin for continuous baseline HFRS (linear and log-transformed) across the three adjustment models.
 - **Supplementary Table S2.** `section1_prevalent_syndromes_OR.csv` -- Logistic-regression OR-per-SD endotrophin for the four prevalent frailty-syndrome flags plus an aggregate "any frailty syndrome" outcome.
@@ -249,11 +251,16 @@ The following supplementary tables and figures are deposited alongside the manus
 - **Supplementary Table S6.** `section2_hfrs_top_contributors.csv` -- Top-30 ICD-10 codes ranked by total Gilbert-weight contribution, with per-eid frequency and per-code weight.
 - **Supplementary Table S7.** `section2_per_sd.csv` -- Per-SD endotrophin Cox results across 13 endpoints × 3 adjustment models, with raw *P*, BH-q and concordance index. The companion `section2_quartiles.csv` provides the Q2 / Q3 / Q4 vs Q1 hazard ratios per endpoint × model.
 - **Supplementary Table S8.** `section2_zenin_components.csv` -- Share of Zenin healthspan composite events contributed by each first-occurring component.
+
+### Supplementary tables (replication metadata)
+
+- **Supplementary Table S9.** `Table_S9_ICD10_endpoint_definitions.csv` -- Full ICD-10 endpoint definitions used by the analysis pipeline: endpoint label, human-readable code summary (e.g. I50*, I21-I22, J40-J44), and the exact regular expression applied to the normalised comma-prefixed ICD-10 string.
+- **Supplementary Table S10.** `Table_S10_Gilbert_HFRS_codes.csv` -- The full 109-code Gilbert 2018 Hospital Frailty Risk Score table (3-character ICD-10 prefix + weight). 4- and 5-character child codes inherit the parent weight via prefix match. Weight thresholds: >= 5 (intermediate-risk), >= 15 (high-risk).
+- **Supplementary Table S11.** `Table_S11_adjustment_models.csv` -- Covariate sets for the three nested Cox-regression adjustment models (Base / Clinical / Clinical + Biomarkers).
+
 ### Supplementary figures
 
 The Clinical-only-adjusted versions of Figs. 3 - 5 (i.e. the same Cox-modelled cumulative-incidence curves but **without** CRP and NT-proBNP in the adjustment set) are reproduced below as Suppl. Figs. S1 - S3. They are presented for transparency: the differences between the primary (Clinical + Biomarkers) and Clinical-only curves quantify how much of the endotrophin -> endpoint signal is mediated by CRP and NT-proBNP.
-
-![Supplementary Figure S0 -- Baseline 2-year cumulative HFRS distribution by ETP quartile. Left: 100% stacked bar of HFRS bin (0 / 0-1 / 1-3 / 3-5 / >5) by ETP quartile. Right: percentage of participants with HFRS >= 5 (Gilbert intermediate-risk threshold) per quartile, with exact percentages annotated. The dose-response is visible in both panels: HFRS=0 share falls from 94.5 % in Q1 to 86.2 % in Q4; HFRS >= 5 share rises from 0.35 % to 1.58 % (~4.5x).](figures/Figure_S0_HFRS_distribution.png)
 
 ![Supplementary Figure S1 -- Clinical-only-adjusted cumulative incidence by endotrophin quartile (Q1 reference) for the four primary endpoints (mirrors Fig. 3 but omits CRP and NT-proBNP from the adjustment set). (a) All-cause mortality. (b) HFRS-positive admission (>=5). (c) Zenin healthspan composite. (d) Incident CKD.](figures/Figure_S1_primary_KM_clinical.png)
 

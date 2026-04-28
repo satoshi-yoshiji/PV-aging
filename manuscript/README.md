@@ -13,7 +13,6 @@ manuscript/
 │   ├── Figure_3_primary_KM.png             # PRIMARY (Clinical+Biomarkers): mortality, HFRS, Zenin, CKD
 │   ├── Figure_4_frailty_syndromes_KM.png   # PRIMARY: hip fx, falls, delirium, ulcer
 │   ├── Figure_5_disease_panel_KM.png       # PRIMARY: HF, T2D, dementia, CVD-event, cancer-event
-│   ├── Figure_S0_HFRS_distribution.png     # SUPPL: stratified-by-quartile HFRS distribution (was Fig 1a)
 │   ├── Figure_S1_primary_KM_clinical.png   # SUPPL: Fig 3 with Clinical-only (no CRP/NT-proBNP)
 │   ├── Figure_S2_frailty_syndromes_KM_clinical.png  # SUPPL: Fig 4 Clinical-only
 │   ├── Figure_S3_disease_panel_KM_clinical.png      # SUPPL: Fig 5 Clinical-only
@@ -21,7 +20,7 @@ manuscript/
 │   ├── Figure_S5_prevalent_syndromes_OR_forest.png  # SUPPL: OR-per-SD prevalent-syndrome forest, was Fig 1c
 │   ├── section1_*.png                      # raw per-figure PNGs (Section 1)
 │   └── section2_<endpoint>_adjcuminc_{biomarkers,clinical}.png   # per-endpoint KM/cuminc by adjustment model
-└── supplementary/
+└── supplementary_tables/
     ├── section1_baseline_hfrs_OLS.csv          # Suppl. Table S1
     ├── section1_prevalent_syndromes_OR.csv     # Suppl. Table S2
     ├── section1_multimorbidity_count.csv       # Suppl. Table S3
@@ -29,6 +28,9 @@ manuscript/
     ├── section2_cohort_flow.csv                # Suppl. Table S5
     ├── section2_hfrs_top_contributors.csv      # Suppl. Table S6
     ├── section2_per_sd.csv                     # Suppl. Table S7 (per-SD HRs)
+    ├── Table_S9_ICD10_endpoint_definitions.csv # ICD-10 patterns + regex used by the parser
+    ├── Table_S10_Gilbert_HFRS_codes.csv        # full 109-code Gilbert 2018 HFRS table + weights
+    ├── Table_S11_adjustment_models.csv         # covariate sets per adjustment model
     ├── section2_quartiles.csv                  # Suppl. Table S7 (quartile HRs)
     └── section2_zenin_components.csv           # Suppl. Table S8
 ```

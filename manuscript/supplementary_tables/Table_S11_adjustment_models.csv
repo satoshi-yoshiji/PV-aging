@@ -1,0 +1,4 @@
+model_id,manuscript_label,role,n_covariates,covariates
+Base,Base,minimal adjustment for technical and demographic covariates,5,age; sex; centre; proc; Batch
++Clinical,Clinical,added clinical-risk-factor covariates (cumulative on top of Base),10,BMI; egfr; SBP; ever_smoked; diabetes; hypertension; dyslipidemia; hba1c_prevent; hdl_c_prevent; total_c_prevent
++Biomarkers,Clinical + Biomarkers (PRIMARY),added CRP and NT-proBNP (cumulative on top of Clinical); pre-specified primary analysis,2,CRP; ntprobnp
