@@ -7,11 +7,13 @@ manuscript/
 ├── Manuscript_ETP_aging.v1.md  # full manuscript with embedded figures
 ├── Manuscript_ETP_aging.v1.pdf # mdpdf-rendered PDF (Liberation Serif 12pt, 1.5 line-height, letter, 1in margins)
 ├── figures/
-│   ├── Figure_1_cross_sectional.png        # composite, 3 panels (cross-sectional aging proxies)
+│   ├── Table_1.png                         # primary Cox HRs across 13 endpoints (rendered as image; mdpdf doesn't parse markdown tables)
+│   ├── Figure_1_cross_sectional.png        # composite, 2 panels (HFRS-beta forest + prevalent-syndrome OR forest)
 │   ├── Figure_2_master_forest.png          # 13-endpoint forest, faceted by adjustment model
 │   ├── Figure_3_primary_KM.png             # PRIMARY (Clinical+Biomarkers): mortality, HFRS, Zenin, CKD
 │   ├── Figure_4_frailty_syndromes_KM.png   # PRIMARY: hip fx, falls, delirium, ulcer
 │   ├── Figure_5_disease_panel_KM.png       # PRIMARY: HF, T2D, dementia, CVD-event, cancer-event
+│   ├── Figure_S0_HFRS_distribution.png     # SUPPL: stratified-by-quartile HFRS distribution (was Fig 1a)
 │   ├── Figure_S1_primary_KM_clinical.png   # SUPPL: Fig 3 with Clinical-only (no CRP/NT-proBNP)
 │   ├── Figure_S2_frailty_syndromes_KM_clinical.png  # SUPPL: Fig 4 Clinical-only
 │   ├── Figure_S3_disease_panel_KM_clinical.png      # SUPPL: Fig 5 Clinical-only
