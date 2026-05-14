@@ -68,7 +68,7 @@ All-cause mortality (4,187 deaths in 33,527 with complete primary covariates): p
 
 Incident frailty (HFRS-positive admission, cumulative score >= 5; 8,107 events): per-SD HR 1.22 (1.19 - 1.25), *P* = 1.6e-48. The signal is the residual after CRP- and NT-proBNP-adjustment of the unmediated 1.26 effect seen in the Clinical-only sensitivity (Supplementary Fig. S1). The participants who eventually crossed the >= 5 threshold contributed weight predominantly through urinary-system disorders (N39), history-of-conditions codes (Z87), arthrosis (M19), recurrent admissions for nervous-system symptoms (R29) and falls (W19) - codes that biologically connect connective-tissue remodelling to musculoskeletal and neurogeriatric decline (Supplementary Table S6).
 
-Zenin healthspan composite (first occurrence of HF, MI, COPD, stroke, dementia, diabetes, cancer or death; 11,312 events): per-SD HR 1.12 (1.10 - 1.15), *P* = 8.6e-23. The first-component breakdown showed that 48% of composite events were cancers, 15% T2D, 9% deaths and 8% COPD admissions, with the remainder distributed across stroke, HF, MI and dementia - recapitulating the spectrum of leading age-related conditions in this age range (Supplementary Table S8).
+Zenin healthspan composite (first occurrence of HF, MI, COPD, stroke, dementia, diabetes, cancer or death; 10,261 events): per-SD HR 1.15 (1.12 - 1.17), *P* = 1.3e-29. The first-component breakdown showed that 41% of composite events were cancers, 18% T2D, 10% deaths and 10% COPD admissions, with the remainder distributed across HF (7%), MI (5%), stroke (5%) and dementia (4%) - recapitulating the spectrum of leading age-related conditions in this age range (Supplementary Table S8).
 
 Incident CKD (1,679 events): per-SD HR 1.38 (1.32 - 1.44), *P* = 2.3e-47, closely reproducing the published per-SD CKD HR of 1.53 from our earlier UKB-PPP analysis[20] (which used a different ICD parser and an eGFR-stratified analytic cohort, with no CRP / NT-proBNP adjustment) and providing a positive control that the new ICD-10 long-form parser is well-calibrated.
 
@@ -88,7 +88,7 @@ Modeled separately, the four constituent frailty-syndrome ICD endpoints retained
 
 The pre-specified incident-disease panel produced effect sizes consistent with the existing UKB-PPP literature for the same exposure (Fig. 5, Supplementary Table S7): incident T2D (HR 1.11, *P* = 6.0e-7), incident HF (HR 1.11, *P* = 4.9e-5), incident CKD (HR 1.38, *P* = 2.3e-47), and incident dementia (HR 1.05, *P* = 0.09). Dementia was the only endpoint at which the primary model attenuated the association out of nominal significance - under the Clinical-only sensitivity (without CRP / NT-proBNP) the dementia HR is 1.08 (*P* = 0.009), so CRP and NT-proBNP appear to capture much of the vascular- and inflammation-mediated dementia risk that endotrophin tracks at the population level.
 
-We were unable to compute true cause-specific (CVD or cancer) mortality because UK Biobank field 40001 (underlying cause-of-death ICD-10 code) was not in the curated dataset. As a transparent surrogate, we report the first incident I00-I99 event ("any-CVD event") and the first incident C00-D48 event ("any-cancer event") from the HES record. Both retained nominal significance in the primary model: HR 1.08 (1.06 - 1.11), *P* = 2.5e-10 for any-CVD and HR 1.05 (1.02 - 1.08), *P* = 8.6e-4 for any-cancer, with the caveat that these are first-event composites rather than deaths from those causes.
+We were unable to compute true cause-specific (CVD or cancer) mortality because UK Biobank field 40001 (underlying cause-of-death ICD-10 code) was not in the curated dataset. As a transparent surrogate, we report the first incident I00-I99 event ("any-CVD event") and the first incident malignant- or in-situ-/uncertain-neoplasm event ("any-cancer event", C00-C97 + D00-D09 + D37-D48) from the HES record. Both retained nominal significance in the primary model: HR 1.08 (1.06 - 1.11), *P* = 2.5e-10 for any-CVD and HR 1.05 (1.02 - 1.09), *P* = 7.7e-4 for any-cancer, with the caveat that these are first-event composites rather than deaths from those causes.
 
 ![](figures/Figure_5_disease_panel_KM.png)
 
@@ -149,16 +149,16 @@ ICD-10-derived endpoints. Each participant's lifetime ICD-10 diagnosis history w
 - Heart failure (Zenin): I50*
 - Myocardial infarction: I21*, I22*
 - COPD: J40 - J44
-- Stroke: I60 - I69
+- Stroke: I60 - I64 (acute cerebrovascular events; excludes I65 - I69 sequelae)
 - Dementia: F00 - F03, G30*
 - T2D (Zenin component): E11*
-- Cancer: C00 - C97, D00 - D48
-- Hip fracture: S72*
+- Cancer: C00 - C97, D00 - D09, D37 - D48 (malignant + in-situ + uncertain/unknown behavior; excludes benign neoplasms D10 - D36)
+- Hip fracture: S72.0 - S72.2 (proximal-femur fractures only; excludes shaft/distal-femur S72.3+)
 - Falls: W00 - W19, R29.6
 - Delirium: F05*
 - Pressure ulcer: L89*
 - Any incident CVD event: I00 - I99
-- Any incident cancer event: C00 - C97, D00 - D48
+- Any incident cancer event: C00 - C97, D00 - D09, D37 - D48
 - Chronic kidney disease: N18*
 
 For each label, the per-participant first-event date was the earliest matching dxdate. Prevalent flag = 1 if the first event was at or before `date_attending_centre`; incident flag = 1 if the first event occurred after baseline within the follow-up window. Time-to-event used the event date for incident cases and `rowwise_max(time_to_lostfollow, time_to_anydeath, time_to_latest_icd10, max_follow_up)` otherwise, mirroring the censoring recipe established in our previous CKD pipeline.[20] Time was expressed in years (days / 365.25).

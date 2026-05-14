@@ -56,30 +56,41 @@ from ckd_shared import (  # noqa: E402
 # Endpoint dictionaries
 # ---------------------------------------------------------------------------
 # All ICD patterns operate on the comma-separated, dot-stripped, upper-cased
-# string produced by normalize_icd10(). Anchors (^|,) ensure we match a code
-# beginning. [0-9]{0,2} matches 3- to 5-character ICD-10 forms (e.g. I50, I501).
+# string produced by normalize_icd10(). Each pattern matches a single ICD-10
+# code (the parser feeds one code at a time, comma-prefixed). Anchors:
+#   (^|,)\s*  - allow leading whitespace after the comma separator
+#   (\s*,|$)  - require end of string or a trailing comma so partial-prefix
+#               matches don't leak into longer codes (e.g. I508A no longer
+#               accidentally matches as I50).
+# [0-9]{0,2} allows 3- to 5-character ICD-10 forms (e.g. I50, I500, I5001).
+# v2 (2026-05-14): three endpoints narrowed per the updated endpoint-
+# definitions table (Table_S9_ICD10_endpoint_definitions_updated_v2.xlsx):
+#   stroke:        I60-I69 -> I60-I64 (excludes I65-I69 sequelae/other CV)
+#   cancer:        C00-D48 -> C00-C97 + D00-D09 + D37-D48
+#                  (excludes benign neoplasms D10-D36)
+#   hip_fracture:  S72*    -> S72.0-S72.2 (proximal femur only)
 ICD10_PATTERNS: dict[str, str] = {
     # Zenin 8-event healthspan composite (death is sourced from incident_anydeath)
-    "HF":        r"(^|,)I50[0-9]{0,2}",
-    "MI":        r"(^|,)I2[12][0-9]{0,2}",                          # I21*, I22*
-    "COPD":      r"(^|,)J4[0-4][0-9]{0,2}",                         # J40..J44
-    "stroke":    r"(^|,)I6[0-9][0-9]{0,2}",                         # I60..I69
-    "dementia":  r"(^|,)(F0[0-3][0-9]{0,2}|G30[0-9]{0,2})",
-    "T2D":       r"(^|,)E11[0-9]{0,2}",
-    "cancer":    r"(^|,)(C[0-9]{2}[0-9]{0,2}|D(0[0-9]|[1-3][0-9]|4[0-8])[0-9]{0,2})",
+    "HF":        r"(^|,)\s*I50[0-9]{0,2}(\s*,|$)",
+    "MI":        r"(^|,)\s*I2[12][0-9]{0,2}(\s*,|$)",                # I21*, I22*
+    "COPD":      r"(^|,)\s*J4[0-4][0-9]{0,2}(\s*,|$)",               # J40..J44
+    "stroke":    r"(^|,)\s*I6[0-4][0-9]{0,2}(\s*,|$)",               # v2: I60..I64
+    "dementia":  r"(^|,)\s*(F0[0-3][0-9]{0,2}|G30[0-9]{0,2})(\s*,|$)",
+    "T2D":       r"(^|,)\s*E11[0-9]{0,2}(\s*,|$)",
+    "cancer":    r"(^|,)\s*((C[0-8][0-9]|C9[0-7])[0-9]{0,2}|D(0[0-9]|3[7-9]|4[0-8])[0-9]{0,2})(\s*,|$)",  # v2
 
     # Frailty-syndrome hospitalisations (separate Cox each)
-    "hip_fracture":   r"(^|,)S72[0-9]{0,2}",
-    "falls":          r"(^|,)(W0[0-9][0-9]{0,2}|W1[0-9][0-9]{0,2}|R296)",
-    "delirium":       r"(^|,)F05[0-9]{0,2}",
-    "pressure_ulcer": r"(^|,)L89[0-9]{0,2}",
+    "hip_fracture":   r"(^|,)\s*S72[0-2][0-9]{0,2}(\s*,|$)",         # v2: S72.0-S72.2
+    "falls":          r"(^|,)\s*(W0[0-9][0-9]{0,2}|W1[0-9][0-9]{0,2}|R296)(\s*,|$)",
+    "delirium":       r"(^|,)\s*F05[0-9]{0,2}(\s*,|$)",
+    "pressure_ulcer": r"(^|,)\s*L89[0-9]{0,2}(\s*,|$)",
 
     # Cause-specific-mortality SUBSTITUTES (caveat in output table)
-    "any_CVD_event":    r"(^|,)I[0-9]{2}[0-9]{0,2}",                 # I00..I99
-    "any_cancer_event": r"(^|,)(C[0-9]{2}[0-9]{0,2}|D(0[0-9]|[1-3][0-9]|4[0-8])[0-9]{0,2})",
+    "any_CVD_event":    r"(^|,)\s*I[0-9]{2}[0-9]{0,2}(\s*,|$)",      # I00..I99
+    "any_cancer_event": r"(^|,)\s*((C[0-8][0-9]|C9[0-7])[0-9]{0,2}|D(0[0-9]|3[7-9]|4[0-8])[0-9]{0,2})(\s*,|$)",  # v2
 
     # Disease panel
-    "CKD": r"(^|,)N18[0-9]{0,2}",
+    "CKD": r"(^|,)\s*N18[0-9]{0,2}(\s*,|$)",
 }
 
 # Endpoints sourced from pre-computed columns rather than ICD parsing
